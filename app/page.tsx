@@ -768,8 +768,10 @@ export default function Dashboard() {
                         <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm text-right text-white font-mono">
                           {formatPrice(pred.predicted_price)}
                         </td>
-                        <td className="py-2 md:py-3 px-2 md:px-4 text-center hidden sm:table-cell">
-                          {getTrendIcon(pred.trend)}
+                        <td className="py-2 md:py-3 px-2 md:px-4 hidden sm:table-cell">
+                          <div className="flex items-center justify-center">
+                            {getTrendIcon(pred.trend)}
+                          </div>
                         </td>
                         <td className="py-2 md:py-3 px-2 md:px-4 text-center hidden md:table-cell">
                           <span className="text-xs md:text-sm text-gray-300">{pred.confidence.toFixed(0)}%</span>
@@ -966,9 +968,12 @@ export default function Dashboard() {
 
         {/* System Info Footer */}
         <div className="text-center text-xs text-gray-600 py-3 md:py-4 space-y-1">
-          <div>Bitcoin Predictor Dashboard v2.0</div>
-          <div className="hidden sm:block">Multi-Timeframe ML Predictions | WIB Timezone (UTC+7)</div>
-          <div className="sm:hidden">ML Predictions | WIB (UTC+7)</div>
+          <div>Bitcoin Predictor Dashboard v1.0 (Latest)</div>
+          <div className="hidden sm:block">© {new Date().getFullYear()} Pintucuan. All Rights Reserved.</div>
+          <div className="sm:hidden">© {new Date().getFullYear()} Pintucuan. All Rights Reserved.</div>
+          <div className="hidden sm:block">Developer by Arya</div>
+          <div className="sm:hidden">Developer by Arya</div>
+      
         </div>
       </div>
     </div>
