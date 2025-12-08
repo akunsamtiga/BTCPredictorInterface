@@ -748,7 +748,7 @@ export default function Dashboard() {
                       <th className="text-left py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm">Time</th>
                       <th className="text-left py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm">TF</th>
                       <th className="text-right py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm">Price</th>
-                      <th className="text-center py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm hidden sm:table-cell">Trend</th>
+                      <th className="text-center py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm">Trend</th>
                       <th className="text-center py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm hidden md:table-cell">Conf</th>
                       <th className="text-center py-2 md:py-3 px-2 md:px-4 text-gray-400 font-medium text-xs md:text-sm">Result</th>
                     </tr>
@@ -768,7 +768,7 @@ export default function Dashboard() {
                         <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm text-right text-white font-mono">
                           {formatPrice(pred.predicted_price)}
                         </td>
-                        <td className="py-2 md:py-3 px-2 md:px-4 hidden sm:table-cell">
+                        <td className="py-2 md:py-3 px-2 md:px-4">
                           <div className="flex items-center justify-center">
                             {getTrendIcon(pred.trend)}
                           </div>
