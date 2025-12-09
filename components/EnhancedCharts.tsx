@@ -6,7 +6,7 @@ import {
 import { 
   TrendingUp, TrendingDown, Clock, CheckCircle, XCircle, 
   Calendar, Filter, Download, ChevronLeft, ChevronRight,
-  Activity, Target, Zap
+  Activity, Target, Zap, X
 } from 'lucide-react';
 
 // ============================================================================
@@ -100,13 +100,13 @@ const RealTimePriceChart = ({ predictions }: { predictions: Prediction[] }) => {
 
     const data = payload[0].payload;
     return (
-      <div className="bg-gray-800 border border-gray-700 rounded-lg p-3 shadow-xl">
-        <p className="text-white font-semibold mb-2">{data.timestamp}</p>
-        <p className="text-blue-400 text-sm">
+      <div className="bg-gray-800 border border-gray-700 rounded-lg p-2 md:p-3 shadow-xl">
+        <p className="text-white font-semibold mb-1 md:mb-2 text-xs md:text-sm">{data.timestamp}</p>
+        <p className="text-blue-400 text-xs md:text-sm">
           Price: ${data.price.toFixed(2)}
         </p>
         {data.prediction && (
-          <div className="mt-2 pt-2 border-t border-gray-700">
+          <div className="mt-1 md:mt-2 pt-1 md:pt-2 border-t border-gray-700">
             <p className={`text-xs ${
               data.prediction.trend.includes('CALL') 
                 ? 'text-green-400' 
@@ -129,18 +129,18 @@ const RealTimePriceChart = ({ predictions }: { predictions: Prediction[] }) => {
   const predictionPoints = priceData.filter(d => d.prediction);
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-          <Activity className="w-5 h-5 text-blue-500" />
-          Live Price with Predictions
+    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-3 md:p-6 border border-gray-700">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 md:mb-4 gap-3">
+        <h2 className="text-base md:text-xl font-semibold text-white flex items-center gap-2">
+          <Activity className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
+          <span className="text-sm md:text-xl">Live Price with Predictions</span>
         </h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           {(['1h', '6h', '24h'] as const).map((range) => (
             <button
               key={range}
               onClick={() => setTimeRange(range)}
-              className={`px-3 py-1 rounded text-sm transition-colors ${
+              className={`flex-1 sm:flex-none px-2 md:px-3 py-1 rounded text-xs md:text-sm transition-colors ${
                 timeRange === range
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
@@ -152,7 +152,7 @@ const RealTimePriceChart = ({ predictions }: { predictions: Prediction[] }) => {
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={300} className="md:h-[400px]">
         <AreaChart data={priceData}>
           <defs>
             <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
@@ -164,12 +164,16 @@ const RealTimePriceChart = ({ predictions }: { predictions: Prediction[] }) => {
           <XAxis 
             dataKey="timestamp" 
             stroke="#9ca3af"
-            style={{ fontSize: '12px' }}
+            style={{ fontSize: '10px' }}
+            tick={{ fontSize: 10 }}
+            interval="preserveStartEnd"
           />
           <YAxis 
             stroke="#9ca3af"
-            style={{ fontSize: '12px' }}
+            style={{ fontSize: '10px' }}
+            tick={{ fontSize: 10 }}
             domain={['dataMin - 200', 'dataMax + 200']}
+            width={60}
           />
           <Tooltip content={<CustomTooltip />} />
           <Area
@@ -193,18 +197,18 @@ const RealTimePriceChart = ({ predictions }: { predictions: Prediction[] }) => {
         </AreaChart>
       </ResponsiveContainer>
 
-      <div className="flex items-center gap-4 mt-4 text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+      <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-3 md:mt-4 text-xs md:text-sm">
+        <div className="flex items-center gap-1 md:gap-2">
+          <div className="w-2 h-2 md:w-3 md:h-3 bg-blue-500 rounded-full"></div>
           <span className="text-gray-400">Actual Price</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-0.5 bg-green-500"></div>
-          <span className="text-gray-400">CALL Prediction</span>
+        <div className="flex items-center gap-1 md:gap-2">
+          <div className="w-2 h-0.5 md:w-3 md:h-0.5 bg-green-500"></div>
+          <span className="text-gray-400">CALL</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-0.5 bg-red-500"></div>
-          <span className="text-gray-400">PUT Prediction</span>
+        <div className="flex items-center gap-1 md:gap-2">
+          <div className="w-2 h-0.5 md:w-3 md:h-0.5 bg-red-500"></div>
+          <span className="text-gray-400">PUT</span>
         </div>
       </div>
     </div>
@@ -268,19 +272,19 @@ const TradeHistoryTimeline = ({ predictions }: { predictions: Prediction[] }) =>
   };
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-          <Clock className="w-5 h-5 text-blue-500" />
-          Trade History Timeline
+    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-3 md:p-6 border border-gray-700">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 md:mb-6 gap-3">
+        <h2 className="text-base md:text-xl font-semibold text-white flex items-center gap-2">
+          <Clock className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
+          <span className="text-sm md:text-xl">Trade History Timeline</span>
         </h2>
         
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           {/* Time View */}
           <select
             value={timeView}
             onChange={(e) => setTimeView(e.target.value as any)}
-            className="bg-gray-700 text-white px-3 py-1 rounded text-sm border border-gray-600"
+            className="flex-1 sm:flex-none bg-gray-700 text-white px-2 md:px-3 py-1 rounded text-xs md:text-sm border border-gray-600"
           >
             <option value="24h">24 Hours</option>
             <option value="7d">7 Days</option>
@@ -291,31 +295,31 @@ const TradeHistoryTimeline = ({ predictions }: { predictions: Prediction[] }) =>
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value as any)}
-            className="bg-gray-700 text-white px-3 py-1 rounded text-sm border border-gray-600"
+            className="flex-1 sm:flex-none bg-gray-700 text-white px-2 md:px-3 py-1 rounded text-xs md:text-sm border border-gray-600"
           >
             <option value="all">All</option>
-            <option value="win">Wins Only</option>
-            <option value="lose">Losses Only</option>
+            <option value="win">Wins</option>
+            <option value="lose">Losses</option>
             <option value="pending">Pending</option>
           </select>
         </div>
       </div>
 
-      <div className="space-y-6 max-h-[600px] overflow-y-auto pr-2">
+      <div className="space-y-4 md:space-y-6 max-h-[500px] md:max-h-[600px] overflow-y-auto pr-1 md:pr-2">
         {groupedPredictions.map(([hour, preds]) => {
           const stats = getStats(preds);
           
           return (
             <div key={hour} className="relative">
               {/* Hour Header */}
-              <div className="flex items-center gap-4 mb-3">
-                <div className="bg-blue-600 rounded-lg px-3 py-1">
-                  <span className="text-white text-sm font-semibold">{hour}</span>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 md:gap-4 mb-2 md:mb-3">
+                <div className="bg-blue-600 rounded-lg px-2 md:px-3 py-1">
+                  <span className="text-white text-xs md:text-sm font-semibold">{hour}</span>
                 </div>
-                <div className="flex items-center gap-4 text-xs text-gray-400">
+                <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs text-gray-400">
                   <span className="flex items-center gap-1">
                     <Target className="w-3 h-3" />
-                    {stats.total} trades
+                    {stats.total}
                   </span>
                   {stats.wins > 0 && (
                     <span className="text-green-400 flex items-center gap-1">
@@ -348,7 +352,7 @@ const TradeHistoryTimeline = ({ predictions }: { predictions: Prediction[] }) =>
               </div>
 
               {/* Timeline Items */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 ml-4 border-l-2 border-gray-700 pl-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 ml-2 md:ml-4 border-l-2 border-gray-700 pl-2 md:pl-4">
                 {preds.map((pred) => {
                   const isWin = pred.validation_result === 'WIN';
                   const isLose = pred.validation_result === 'LOSE';
@@ -358,13 +362,13 @@ const TradeHistoryTimeline = ({ predictions }: { predictions: Prediction[] }) =>
                     <button
                       key={pred.id}
                       onClick={() => setSelectedPrediction(pred)}
-                      className={`text-left p-3 rounded-lg border transition-all hover:scale-105 ${
+                      className={`text-left p-2 md:p-3 rounded-lg border transition-all hover:scale-105 active:scale-95 ${
                         isWin ? 'bg-green-500/10 border-green-500/50' :
                         isLose ? 'bg-red-500/10 border-red-500/50' :
                         'bg-yellow-500/10 border-yellow-500/50'
                       }`}
                     >
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center justify-between mb-1 md:mb-2">
                         <span className="text-xs text-gray-400">
                           {new Date(pred.prediction_time).toLocaleTimeString('en-US', {
                             hour: '2-digit',
@@ -372,13 +376,13 @@ const TradeHistoryTimeline = ({ predictions }: { predictions: Prediction[] }) =>
                           })}
                         </span>
                         {pred.trend.includes('CALL') ? (
-                          <TrendingUp className="w-4 h-4 text-green-400" />
+                          <TrendingUp className="w-3 h-3 md:w-4 md:h-4 text-green-400" />
                         ) : (
-                          <TrendingDown className="w-4 h-4 text-red-400" />
+                          <TrendingDown className="w-3 h-3 md:w-4 md:h-4 text-red-400" />
                         )}
                       </div>
                       
-                      <div className="text-sm font-semibold text-white mb-1">
+                      <div className="text-xs md:text-sm font-semibold text-white mb-1">
                         ${pred.predicted_price.toFixed(2)}
                       </div>
                       
@@ -406,28 +410,33 @@ const TradeHistoryTimeline = ({ predictions }: { predictions: Prediction[] }) =>
       {/* Selected Prediction Detail Modal */}
       {selectedPrediction && (
         <div 
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 md:p-4"
           onClick={() => setSelectedPrediction(null)}
         >
           <div 
-            className="bg-gray-800 rounded-xl p-6 max-w-md w-full border border-gray-700"
+            className="bg-gray-800 rounded-xl p-4 md:p-6 max-w-md w-full border border-gray-700 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">Prediction Details</h3>
+            <div className="flex items-center justify-between mb-3 md:mb-4">
+              <h3 className="text-base md:text-lg font-semibold text-white">Prediction Details</h3>
               <button
                 onClick={() => setSelectedPrediction(null)}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-white p-1"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-3 text-sm">
+            <div className="space-y-2 md:space-y-3 text-xs md:text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-400">Time:</span>
-                <span className="text-white">
-                  {new Date(selectedPrediction.prediction_time).toLocaleString()}
+                <span className="text-white text-right">
+                  {new Date(selectedPrediction.prediction_time).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -461,14 +470,14 @@ const TradeHistoryTimeline = ({ predictions }: { predictions: Prediction[] }) =>
               
               {selectedPrediction.validated && (
                 <>
-                  <div className="border-t border-gray-700 pt-3"></div>
+                  <div className="border-t border-gray-700 pt-2 md:pt-3"></div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Actual Price:</span>
                     <span className="text-white">${selectedPrediction.actual_price?.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Result:</span>
-                    <span className={selectedPrediction.validation_result === 'WIN' ? 'text-green-400' : 'text-red-400'}>
+                    <span className={selectedPrediction.validation_result === 'WIN' ? 'text-green-400 font-bold' : 'text-red-400 font-bold'}>
                       {selectedPrediction.validation_result}
                     </span>
                   </div>
@@ -587,22 +596,22 @@ const PerformanceHeatmap = ({ predictions }: { predictions: Prediction[] }) => {
   const hoveredStats = hoveredDay ? heatmapData[hoveredDay] : null;
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-blue-500" />
-          Performance Heatmap
+    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-3 md:p-6 border border-gray-700">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 md:mb-6 gap-3">
+        <h2 className="text-base md:text-xl font-semibold text-white flex items-center gap-2">
+          <Calendar className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
+          <span className="text-sm md:text-xl">Performance Heatmap</span>
         </h2>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4 w-full sm:w-auto justify-between sm:justify-end">
           <button
             onClick={() => changeMonth(-1)}
-            className="p-2 bg-gray-700 hover:bg-gray-600 rounded transition-colors"
+            className="p-1.5 md:p-2 bg-gray-700 hover:bg-gray-600 rounded transition-colors"
           >
             <ChevronLeft className="w-4 h-4 text-white" />
           </button>
           
-          <span className="text-white font-semibold min-w-[150px] text-center">
+          <span className="text-white font-semibold text-sm md:text-base text-center flex-1 sm:flex-none sm:min-w-[150px]">
             {selectedMonth.toLocaleDateString('en-US', { 
               month: 'long', 
               year: 'numeric' 
@@ -611,7 +620,7 @@ const PerformanceHeatmap = ({ predictions }: { predictions: Prediction[] }) => {
           
           <button
             onClick={() => changeMonth(1)}
-            className="p-2 bg-gray-700 hover:bg-gray-600 rounded transition-colors"
+            className="p-1.5 md:p-2 bg-gray-700 hover:bg-gray-600 rounded transition-colors"
           >
             <ChevronRight className="w-4 h-4 text-white" />
           </button>
@@ -619,18 +628,19 @@ const PerformanceHeatmap = ({ predictions }: { predictions: Prediction[] }) => {
       </div>
 
       {/* Calendar Grid */}
-      <div className="mb-6">
+      <div className="mb-4 md:mb-6">
         {/* Day Headers */}
-        <div className="grid grid-cols-7 gap-2 mb-2">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="text-center text-xs text-gray-400 font-medium">
-              {day}
+        <div className="grid grid-cols-7 gap-1 md:gap-2 mb-1 md:mb-2">
+          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+            <div key={i} className="text-center text-xs text-gray-400 font-medium">
+              <span className="hidden sm:inline">{['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i]}</span>
+              <span className="sm:hidden">{day}</span>
             </div>
           ))}
         </div>
 
         {/* Calendar Days */}
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-1 md:gap-2">
           {calendarDays.map((day, i) => {
             if (!day.date || !day.dateKey) {
               return <div key={i} className="aspect-square" />;
@@ -642,13 +652,14 @@ const PerformanceHeatmap = ({ predictions }: { predictions: Prediction[] }) => {
             return (
               <div
                 key={i}
-                className={`aspect-square rounded-lg border transition-all cursor-pointer ${
+                className={`aspect-square rounded border transition-all cursor-pointer ${
                   hasData
-                    ? `${getColorIntensity(stats.winRate)} border-gray-600 hover:scale-110 hover:shadow-lg`
+                    ? `${getColorIntensity(stats.winRate)} border-gray-600 hover:scale-110 hover:shadow-lg active:scale-95`
                     : 'bg-gray-700/30 border-gray-700'
                 }`}
                 onMouseEnter={() => setHoveredDay(day.dateKey)}
                 onMouseLeave={() => setHoveredDay(null)}
+                onClick={() => setHoveredDay(day.dateKey)}
               >
                 <div className="w-full h-full flex items-center justify-center text-xs text-white font-medium">
                   {day.date.getDate()}
@@ -661,15 +672,15 @@ const PerformanceHeatmap = ({ predictions }: { predictions: Prediction[] }) => {
 
       {/* Stats Display */}
       {hoveredStats ? (
-        <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
-          <h3 className="text-white font-semibold mb-3">
+        <div className="bg-gray-900/50 rounded-lg p-3 md:p-4 border border-gray-700">
+          <h3 className="text-white font-semibold mb-2 md:mb-3 text-sm md:text-base">
             {hoveredDay && new Date(hoveredDay).toLocaleDateString('en-US', {
               month: 'long',
               day: 'numeric',
               year: 'numeric'
             })}
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 text-xs md:text-sm">
             <div>
               <div className="text-gray-400 text-xs mb-1">Total Trades</div>
               <div className="text-white font-semibold">{hoveredStats.total}</div>
@@ -685,13 +696,13 @@ const PerformanceHeatmap = ({ predictions }: { predictions: Prediction[] }) => {
               </div>
             </div>
             <div>
-              <div className="text-gray-400 text-xs mb-1">Wins / Losses</div>
+              <div className="text-gray-400 text-xs mb-1">W / L</div>
               <div className="text-white font-semibold">
                 {hoveredStats.wins} / {hoveredStats.losses}
               </div>
             </div>
             <div>
-              <div className="text-gray-400 text-xs mb-1">Avg Confidence</div>
+              <div className="text-gray-400 text-xs mb-1">Avg Conf</div>
               <div className="text-blue-400 font-semibold">
                 {hoveredStats.avgConfidence.toFixed(1)}%
               </div>
@@ -699,37 +710,44 @@ const PerformanceHeatmap = ({ predictions }: { predictions: Prediction[] }) => {
           </div>
         </div>
       ) : (
-        <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700 text-center text-gray-400 text-sm">
-          Hover over a day to see detailed statistics
+        <div className="bg-gray-900/50 rounded-lg p-3 md:p-4 border border-gray-700 text-center text-gray-400 text-xs md:text-sm">
+          <span className="hidden sm:inline">Hover over a day to see detailed statistics</span>
+          <span className="sm:hidden">Tap a day to see stats</span>
         </div>
       )}
 
       {/* Legend */}
-      <div className="mt-6 flex items-center justify-center gap-2">
-        <span className="text-xs text-gray-400">Win Rate:</span>
-        <div className="flex items-center gap-1">
-          <div className="w-4 h-4 bg-red-500 rounded"></div>
-          <span className="text-xs text-gray-400">0-40%</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-4 h-4 bg-orange-500 rounded"></div>
-          <span className="text-xs text-gray-400">40-50%</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-4 h-4 bg-yellow-500 rounded"></div>
-          <span className="text-xs text-gray-400">50-60%</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-4 h-4 bg-green-400 rounded"></div>
-          <span className="text-xs text-gray-400">60-70%</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-4 h-4 bg-green-500 rounded"></div>
-          <span className="text-xs text-gray-400">70-80%</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-4 h-4 bg-green-600 rounded"></div>
-          <span className="text-xs text-gray-400">80%+</span>
+      <div className="mt-4 md:mt-6">
+        <div className="text-xs text-gray-400 mb-2 text-center">Win Rate</div>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <div className="flex items-center gap-1">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-red-500 rounded"></div>
+            <span className="text-xs text-gray-400">0-40%</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-orange-500 rounded"></div>
+            <span className="text-xs text-gray-400 hidden sm:inline">40-50%</span>
+            <span className="text-xs text-gray-400 sm:hidden">40-50</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-yellow-500 rounded"></div>
+            <span className="text-xs text-gray-400 hidden sm:inline">50-60%</span>
+            <span className="text-xs text-gray-400 sm:hidden">50-60</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-green-400 rounded"></div>
+            <span className="text-xs text-gray-400 hidden sm:inline">60-70%</span>
+            <span className="text-xs text-gray-400 sm:hidden">60-70</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-green-500 rounded"></div>
+            <span className="text-xs text-gray-400 hidden sm:inline">70-80%</span>
+            <span className="text-xs text-gray-400 sm:hidden">70-80</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-green-600 rounded"></div>
+            <span className="text-xs text-gray-400">80%+</span>
+          </div>
         </div>
       </div>
     </div>
@@ -747,14 +765,14 @@ interface EnhancedChartsProps {
 export function EnhancedCharts({ predictions }: EnhancedChartsProps) {
   if (!predictions || predictions.length === 0) {
     return (
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 text-center">
-        <p className="text-gray-400">No prediction data available</p>
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-700 text-center">
+        <p className="text-gray-400 text-sm md:text-base">No prediction data available</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Real-time Price Chart */}
       <RealTimePriceChart predictions={predictions} />
 
