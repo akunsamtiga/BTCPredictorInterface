@@ -237,7 +237,7 @@ export async function GET() {
     
     // Calculate statistics per timeframe
     console.log('8️⃣ Calculating timeframe statistics...');
-    const activeTimeframes = [5, 15, 30, 60, 240, 480, 720, 1440, 2880, 4320];
+    const activeTimeframes = [5, 10, 15, 30, 60, 120, 240, 480, 720, 1440];
     const timeframeStats: Statistics[] = activeTimeframes.map(tf => {
       const tfPredictions = validatedPredictions.filter(p => p.timeframe_minutes === tf);
       const tfTotal = tfPredictions.length;
