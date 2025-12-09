@@ -23,6 +23,7 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
+import { EnhancedCharts } from '../components/EnhancedCharts';
 
 // ============================================================================
 // TYPES
@@ -648,6 +649,11 @@ export default function Dashboard() {
 
         {/* Category Statistics */}
         <CategoryStatsGrid categoryStats={data.categoryStats} />
+
+        {/* ENHANCED CHARTS */}
+        {data.recentPredictions && data.recentPredictions.length > 0 && (
+          <EnhancedCharts predictions={data.recentPredictions} />
+        )}
 
         {/* Timeframe Performance */}
         {data.timeframeStats && data.timeframeStats.length > 0 && (
