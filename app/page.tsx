@@ -859,18 +859,22 @@ export default function Dashboard() {
                     LSTM
                   </h3>
                   <div className="space-y-1.5 md:space-y-2 text-xs md:text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">MAE:</span>
-                      <span className="text-white font-medium">
-                        ${data.modelPerformance.metrics.lstm.mae.toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">RMSE:</span>
-                      <span className="text-white font-medium">
-                        ${data.modelPerformance.metrics.lstm.rmse.toFixed(2)}
-                      </span>
-                    </div>
+                    {data.modelPerformance.metrics.lstm.mae !== undefined && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">MAE:</span>
+                        <span className="text-white font-medium">
+                          ${data.modelPerformance.metrics.lstm.mae.toFixed(2)}
+                        </span>
+                      </div>
+                    )}
+                    {data.modelPerformance.metrics.lstm.rmse !== undefined && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">RMSE:</span>
+                        <span className="text-white font-medium">
+                          ${data.modelPerformance.metrics.lstm.rmse.toFixed(2)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -882,12 +886,14 @@ export default function Dashboard() {
                     Random Forest
                   </h3>
                   <div className="space-y-1.5 md:space-y-2 text-xs md:text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Accuracy:</span>
-                      <span className="text-white font-medium">
-                        {(data.modelPerformance.metrics.rf.accuracy * 100).toFixed(2)}%
-                      </span>
-                    </div>
+                    {data.modelPerformance.metrics.rf.accuracy !== undefined && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Accuracy:</span>
+                        <span className="text-white font-medium">
+                          {(data.modelPerformance.metrics.rf.accuracy * 100).toFixed(2)}%
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -899,18 +905,22 @@ export default function Dashboard() {
                     Gradient Boosting
                   </h3>
                   <div className="space-y-1.5 md:space-y-2 text-xs md:text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">MAE:</span>
-                      <span className="text-white font-medium">
-                        ${data.modelPerformance.metrics.gb.mae.toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">RMSE:</span>
-                      <span className="text-white font-medium">
-                        ${data.modelPerformance.metrics.gb.rmse.toFixed(2)}
-                      </span>
-                    </div>
+                    {data.modelPerformance.metrics.gb.mae !== undefined && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">MAE:</span>
+                        <span className="text-white font-medium">
+                          ${data.modelPerformance.metrics.gb.mae.toFixed(2)}
+                        </span>
+                      </div>
+                    )}
+                    {data.modelPerformance.metrics.gb.rmse !== undefined && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">RMSE:</span>
+                        <span className="text-white font-medium">
+                          ${data.modelPerformance.metrics.gb.rmse.toFixed(2)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
