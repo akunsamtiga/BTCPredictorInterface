@@ -755,7 +755,7 @@ const PerformanceHeatmap = ({ predictions }: { predictions: Prediction[] }) => {
 };
 
 // ============================================================================
-// ALL-IN-ONE WRAPPER COMPONENT
+// ALL-IN-ONE WRAPPER COMPONENT WITH MOBILE CAROUSEL
 // ============================================================================
 
 interface EnhancedChartsProps {
@@ -763,6 +763,10 @@ interface EnhancedChartsProps {
 }
 
 export function EnhancedCharts({ predictions }: EnhancedChartsProps) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
   if (!predictions || predictions.length === 0) {
     return (
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-700 text-center">
@@ -771,17 +775,130 @@ export function EnhancedCharts({ predictions }: EnhancedChartsProps) {
     );
   }
 
+  const charts = [
+    { id: 0, name: 'Live Price', component: <RealTimePriceChart predictions={predictions} /> },
+    { id: 1, name: 'Trade History', component: <TradeHistoryTimeline predictions={predictions} /> },
+    { id: 2, name: 'Performance', component: <PerformanceHeatmap predictions={predictions} /> }
+  ];
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && activeSlide < charts.length - 1) {
+      setActiveSlide(activeSlide + 1);
+    }
+    if (isRightSwipe && activeSlide > 0) {
+      setActiveSlide(activeSlide - 1);
+    }
+
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
+  const goToSlide = (index: number) => {
+    setActiveSlide(index);
+  };
+
+  const nextSlide = () => {
+    setActiveSlide((prev) => (prev + 1) % charts.length);
+  };
+
+  const prevSlide = () => {
+    setActiveSlide((prev) => (prev - 1 + charts.length) % charts.length);
+  };
+
   return (
-    <div className="space-y-4 md:space-y-6">
-      {/* Real-time Price Chart */}
-      <RealTimePriceChart predictions={predictions} />
+    <>
+      {/* Mobile Carousel View */}
+      <div className="md:hidden">
+        <div 
+          className="relative overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Slides Container */}
+          <div 
+            className="flex transition-transform duration-300 ease-out"
+            style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+          >
+            {charts.map((chart) => (
+              <div key={chart.id} className="w-full flex-shrink-0">
+                {chart.component}
+              </div>
+            ))}
+          </div>
 
-      {/* Trade History Timeline */}
-      <TradeHistoryTimeline predictions={predictions} />
+          {/* Navigation Arrows */}
+          {activeSlide > 0 && (
+            <button
+              onClick={prevSlide}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-800/90 hover:bg-gray-700 p-2 rounded-full border border-gray-600 shadow-lg z-10"
+              aria-label="Previous chart"
+            >
+              <ChevronLeft className="w-5 h-5 text-white" />
+            </button>
+          )}
+          
+          {activeSlide < charts.length - 1 && (
+            <button
+              onClick={nextSlide}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-800/90 hover:bg-gray-700 p-2 rounded-full border border-gray-600 shadow-lg z-10"
+              aria-label="Next chart"
+            >
+              <ChevronRight className="w-5 h-5 text-white" />
+            </button>
+          )}
+        </div>
 
-      {/* Performance Heatmap */}
-      <PerformanceHeatmap predictions={predictions} />
-    </div>
+        {/* Dots Indicator */}
+        <div className="flex items-center justify-center gap-2 mt-4">
+          {charts.map((chart) => (
+            <button
+              key={chart.id}
+              onClick={() => goToSlide(chart.id)}
+              className={`transition-all ${
+                activeSlide === chart.id
+                  ? 'w-8 h-2 bg-blue-500'
+                  : 'w-2 h-2 bg-gray-600 hover:bg-gray-500'
+              } rounded-full`}
+              aria-label={`Go to ${chart.name}`}
+            />
+          ))}
+        </div>
+
+        {/* Chart Name Indicator */}
+        <div className="text-center mt-2">
+          <span className="text-xs text-gray-400">
+            {charts[activeSlide].name} ({activeSlide + 1}/{charts.length})
+          </span>
+        </div>
+      </div>
+
+      {/* Desktop Stacked View */}
+      <div className="hidden md:block space-y-4 md:space-y-6">
+        {/* Real-time Price Chart */}
+        <RealTimePriceChart predictions={predictions} />
+
+        {/* Trade History Timeline */}
+        <TradeHistoryTimeline predictions={predictions} />
+
+        {/* Performance Heatmap */}
+        <PerformanceHeatmap predictions={predictions} />
+      </div>
+    </>
   );
 }
 
